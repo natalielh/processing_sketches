@@ -11,6 +11,7 @@ color c2;
 void setup(){
   //frameRate(30);
   fullScreen();
+  //pixelDensity(2);
   background(255);
 }
 
@@ -25,7 +26,7 @@ void mouseReleased(){
   
   //randomized 'before' colour
   c1 = color(
-    random(200, 255),
+    random(220, 255),
     0,
     random(0, 100)
   );
@@ -37,11 +38,16 @@ void mouseReleased(){
     random(200, 255)
   );
   
+  //move the pen into position
   translate(mouseX, height);
   
+  //actual drawing on the canvas begins
+  //the first line
   line(0, 0, 0, -20);
   translate(0, -20);
-  tree((height-mouseY)/6);
+  //branch out from the first line
+  tree((height-mouseY)/5.5);
+  
 }
 
 void tree(float len){
@@ -51,8 +57,8 @@ void tree(float len){
   if (len > 12){
     
     //colour and stroke change
-    stroke(lerpColor(c1, c2, map(len, 10, 50, 0, 1)));
-    strokeWeight(map(len, 10, 50, 0.5, 3));
+    stroke(lerpColor(c1, c2, map(len, 12, 70, 0, 1)), 150);
+    strokeWeight(map(len, 10, 50, 0.1, 3));
     
     //tree branch to the right
     push(); //save
