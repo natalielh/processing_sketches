@@ -12,12 +12,17 @@ void setup(){
   //frameRate(30);
   fullScreen();
   //pixelDensity(2);
+  //noSmooth();
+  //blendMode(DARKEST);
   background(255);
+  
+  cursor(HAND);
 }
+
 
 void draw(){
-
 }
+
 
 void mouseReleased(){
   //stroke(100, 0, 100, 50);
@@ -26,9 +31,9 @@ void mouseReleased(){
   
   //randomized 'before' colour
   c1 = color(
-    random(220, 255),
+    random(150, 255),
     0,
-    random(0, 100)
+    random(0, 150)
   );
   
   //randomized 'after' colour
@@ -43,8 +48,10 @@ void mouseReleased(){
   
   //actual drawing on the canvas begins
   //the first line
-  line(0, 0, 0, -20);
-  translate(0, -20);
+  strokeWeight(abs(map((height-mouseY)/5.5, 12, 70, 0.2, 2)));
+  line(0, 0, 0, -(height-mouseY)/5.5);
+  translate(0, -(height-mouseY)/5.5);
+  
   //branch out from the first line
   tree((height-mouseY)/5.5);
   
@@ -57,8 +64,13 @@ void tree(float len){
   if (len > 12){
     
     //colour and stroke change
-    stroke(lerpColor(c1, c2, map(len, 12, 70, 0, 1)), 150);
-    strokeWeight(map(len, 10, 50, 0.1, 3));
+    stroke(lerpColor(
+      c1,
+      c2,
+      map(len, 12, 70, 0, 1)),
+      150
+    );
+    strokeWeight(abs(map(len, 12, 70, 0.2, 2)));
     
     //tree branch to the right
     push(); //save
