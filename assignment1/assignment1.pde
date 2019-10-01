@@ -1,4 +1,6 @@
-// organic tree generation
+//
+// heartstrings: organic tree generation
+//
 // references:
 // https://processing.org/examples/tree.html
 //
