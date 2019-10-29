@@ -10,7 +10,7 @@ Clock clock;
 int numButtons = 30;
 int currentButton = 0;
 
-int numIndexes = 20;
+int numIndexes = 13;
 
 int switchInterval = 3000;
 int nextThreshold = switchInterval;
@@ -29,6 +29,7 @@ void setup(){
   
   pixelDensity(1);
   strokeWeight(2);
+  rectMode(CENTER);
   
   clock = new Clock();
   
@@ -37,9 +38,10 @@ void setup(){
   for (int i = 0; i < buttons.length; i++) {
     buttons[i] = new Button(); // Create each object
     buttons[i].x = width/4;
-    buttons[i].y = i*50 + 50;
+    buttons[i].y = i*50 + 300;
     buttons[i].diameter = 36;
     buttons[i].actionIndex = int(random(0, numIndexes));
+    buttons[i].circle = true;
     buttons[i].on = false;
   }
   
@@ -51,12 +53,12 @@ void setup(){
 
 void draw(){
   fill(245);
-  rect(0, 0, width/2, height);  //do not clear the right side!
+  rect(width/4, height/2, width/2, height);  //do not clear the right side!
   
   renderDotGrid();
   
   for (int i=0; i<buttons.length; i++){
-    if(
+    if( buttons[i].on &&
         (
         (mouseX > buttons[i].x - buttons[i].diameter/2) &&
         (mouseX < buttons[i].x + buttons[i].diameter/2)
@@ -68,10 +70,11 @@ void draw(){
         )
     ){
       buttons[i].displayHover();
+      buttons[i].doAction();
       
-      if(mousePressed){
-        buttons[i].doAction();
-      }
+      //if(mousePressed){
+      //  buttons[i].doAction();
+      //}
       
     }else{
       buttons[i].display();
@@ -135,9 +138,10 @@ class Clock {
 
 /////// INPUT AREA
 class InputArea {
-  float x, y;
+  float x, y, w, h;
   
   void display(){
+    
     
   }
 }
@@ -149,8 +153,9 @@ class InputArea {
 class Button {
   float x, y;
   float diameter;
-  color buttonColor = color(0,255,150);
+  color buttonColor = color(0,255,150,240);
   int actionIndex;
+  boolean circle = true;
   boolean on = true;  //always start with button activated so it shows up
   
   /////// ACTIONS
@@ -158,22 +163,24 @@ class Button {
   void doAction(){
     switch(actionIndex) {
   case 0:
-    fill(10, 255, 200);
-    square(random(width/2, width),random(0, height), 100);
+    fill(10, 255, 10);
+    square(random(width/2, width),random(0, height), random(10,30));
     break;
   case 1:
     //make the screen black
     fill(0);
-    rect(width/2, 0, width, height);
+    rect(0.75*width, height/2, width/2, height);
     break;
   case 2:
     fill(0, 0, 240);
     float r = random(0, width/2);
     triangle(width/2+30+r, 75+r, width/2+58+r, 20+r, width/2+86+r, 75+r);
+    buttons[int(random(0, buttons.length))].buttonColor = color(0, 250, 200);
     break;
   case 3:
-    fill(30, random(0,255), 200);
-    ellipse(0.75*width, height/2, random(50,300), random(50,300));
+    // randomized blue ellipses
+    fill(30, random(100,255), 200);
+    ellipse(random(width/2, width), height/2, random(50,300), random(50,300));
     break;
   case 4:
     for (int i = 0; i < buttons.length; i++) {
@@ -189,10 +196,36 @@ class Button {
     fill(255, 255, 0);
     circle(random(width/2, width),random(0, height), 20);
     break;
+  case 7:
+    stroke(255, 30, 255);
+    float a = random(0, height);
+    line(width/2, a, width, a);
+    break;
+  case 8:
+    stroke(255);
+    float b = random(0, height);
+    line(width/2, b, width, b);
+    break;
+  case 9:
+    strokeWeight(10);
+    line(random(width/2, width), random(width/2, width), random(width/2, width), random(width/2, width));
+    break;
+  case 10:
+    buttons[int(random(0, buttons.length))].circle = true;
+    break;
+  case 11:
+    fill(250, 0, 10);
+    float c = random(0, width/2) + width/2;
+    circle(c, c, 50);
+    circle(c+50, c, 50);
+    circle(c+100, c, 50);
+    buttons[int(random(0, buttons.length))].circle = false;
+    break;
   default:
-    // large blue circles
-    fill(10, 255, 200);
-    circle(random(width/2, width),random(0, height), 100);
+    // small circles
+    fill(255, random(10,40), 200);
+    circle(random(width/2, width),random(0, height), 10);
+    buttons[int(random(0, buttons.length))].randomColor();
     break;
 }
   }
@@ -207,8 +240,15 @@ class Button {
   void display(){
     if (on == true){
       fill(buttonColor);
+      strokeWeight(2);
       stroke(0);
-      ellipse(x, y, diameter, diameter);
+      
+      if (circle){
+        circle(x, y, diameter);
+      }else{
+        square(x, y, diameter);
+      }
+      
       
       //now the decoration to make the button stand out!
       fill(255);
@@ -222,10 +262,17 @@ class Button {
     if (on == true){
       fill(buttonColor);
       stroke(0);
-      ellipse(x, y, diameter, diameter);
+
+      if (circle){
+        circle(x, y, diameter);
+        fill(0, 0, 0, 100);
+        circle(x, y, diameter);
+      }else{
+        square(x, y, diameter);
+        fill(0, 0, 0, 100);
+        square(x, y, diameter);
+      }
       
-      fill(0, 0, 0, 100);
-      ellipse(x, y, diameter, diameter);
       
       //now the decoration to make the button stand out!
       fill(255);
@@ -242,9 +289,13 @@ class Button {
   }
   
   void shrink(){
-    if (diameter > 20){
+    if (diameter > 30){
       diameter--;
     }
+  }
+  
+  void randomColor(){
+    buttonColor = color(random(200,255), random(150,255), random(200,255), 240);
   }
   
 }
