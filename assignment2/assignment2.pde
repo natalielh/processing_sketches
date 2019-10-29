@@ -11,7 +11,7 @@ Clock clock;
 int numButtons = 30;
 int currentButton = 0;
 
-int numIndexes = 15;
+int numIndexes = 16;
 
 int switchInterval = 3000;
 int nextThreshold = switchInterval;
@@ -382,5 +382,8 @@ void renderDotGrid(){
 //
 // * ARRAYS:
 //      https://processing.org/tutorials/arrays/
+// * AESTHETIC:
+//      https://www.openprocessing.org/sketch/148769
+//      https://www.openprocessing.org/sketch/432044
 //
 //////////////////////////////
