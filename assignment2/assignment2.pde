@@ -2,15 +2,18 @@
 ///////  INITIALIZE  ///////
 ////////////////////////////
 
-float speed = 1.0;
+int stateCounter = 0;
 
 Button[] buttons; // Declare the array
 Clock clock;
 
-int numButtons = 20;
+int numButtons = 30;
 int currentButton = 0;
 
-int switchInterval = 5000; //in millis
+int numIndexes = 20;
+
+int switchInterval = 3000;
+int nextThreshold = switchInterval;
 
 
 ///////////////////////
@@ -33,11 +36,11 @@ void setup(){
   
   for (int i = 0; i < buttons.length; i++) {
     buttons[i] = new Button(); // Create each object
-    buttons[i].x = int(random(0, width/2-20));
-    buttons[i].y = int(random(0, height));
+    buttons[i].x = width/4;
+    buttons[i].y = i*50 + 50;
     buttons[i].diameter = 36;
-    buttons[i].actionIndex = int(random(0, 30));
-    buttons[i].on = true;
+    buttons[i].actionIndex = int(random(0, numIndexes));
+    buttons[i].on = false;
   }
   
 }
@@ -53,20 +56,16 @@ void draw(){
   renderDotGrid();
   
   for (int i=0; i<buttons.length; i++){
-    
     if(
         (
         (mouseX > buttons[i].x - buttons[i].diameter/2) &&
         (mouseX < buttons[i].x + buttons[i].diameter/2)
         )
-        
         &&
-        
         (
         (mouseY > buttons[i].y - buttons[i].diameter/2) &&
         (mouseY < buttons[i].y + buttons[i].diameter/2)
         )
-    
     ){
       buttons[i].displayHover();
       
@@ -77,11 +76,33 @@ void draw(){
     }else{
       buttons[i].display();
     }
+  }
+  
+  ////
+
+  if(millis() >= nextThreshold){
+    nextThreshold += switchInterval;
+    if (switchInterval > 500){
+      switchInterval -= 100;
+    }
+    stateCounter++;
     
-    
+    if(stateCounter > 3){
+      for (int i = 0; i < 2; i++) {
+        buttons[int(random(0, buttons.length))].x = random(0, width/2);
+        buttons[int(random(0, buttons.length))].y = random(0, height);
+        buttons[int(random(0, buttons.length))].actionIndex = int(random(0, numIndexes));
+      }
+    }
     
   }
-
+  if(stateCounter < buttons.length){
+    for (int i = 0; i < stateCounter; i++) {
+    buttons[i].on = true;
+    }
+  }
+  
+  ////
 
   clock.display();
 
@@ -142,8 +163,31 @@ class Button {
     break;
   case 1:
     //make the screen black
-    rect();
-
+    fill(0);
+    rect(width/2, 0, width, height);
+    break;
+  case 2:
+    fill(0, 0, 240);
+    float r = random(0, width/2);
+    triangle(width/2+30+r, 75+r, width/2+58+r, 20+r, width/2+86+r, 75+r);
+    break;
+  case 3:
+    fill(30, random(0,255), 200);
+    ellipse(0.75*width, height/2, random(50,300), random(50,300));
+    break;
+  case 4:
+    for (int i = 0; i < buttons.length; i++) {
+      buttons[i].grow();
+    }
+    break;
+  case 5:
+    for (int i = 0; i < buttons.length; i++) {
+      buttons[i].shrink();
+    }
+    break;
+  case 6:
+    fill(255, 255, 0);
+    circle(random(width/2, width),random(0, height), 20);
     break;
   default:
     // large blue circles
@@ -189,6 +233,18 @@ class Button {
       ellipse(x-(diameter/5), y-(diameter/5), int(diameter/5), int(diameter/5));
     }
     
+  }
+  
+  void grow(){
+    if (diameter < 250){
+      diameter++;
+    }
+  }
+  
+  void shrink(){
+    if (diameter > 20){
+      diameter--;
+    }
   }
   
 }
