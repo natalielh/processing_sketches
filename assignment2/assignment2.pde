@@ -3,6 +3,7 @@
 ////////////////////////////
 
 int stateCounter = 0;
+boolean displayNum = false;
 
 Button[] buttons; // Declare the array
 Clock clock;
@@ -10,7 +11,7 @@ Clock clock;
 int numButtons = 30;
 int currentButton = 0;
 
-int numIndexes = 13;
+int numIndexes = 15;
 
 int switchInterval = 3000;
 int nextThreshold = switchInterval;
@@ -70,7 +71,7 @@ void draw(){
         )
     ){
       buttons[i].displayHover();
-      buttons[i].doAction();
+      buttons[i].doAction(i);
       
       //if(mousePressed){
       //  buttons[i].doAction();
@@ -103,6 +104,20 @@ void draw(){
     for (int i = 0; i < stateCounter; i++) {
     buttons[i].on = true;
     }
+  }
+  
+  if(keyPressed){
+    if (key == CODED){
+      if (keyCode == RIGHT){
+        displayNum = true;
+      
+      }
+      if (keyCode == LEFT){
+        displayNum = false;
+      
+      }
+    }
+  
   }
   
   ////
@@ -160,15 +175,16 @@ class Button {
   
   /////// ACTIONS
   
-  void doAction(){
+  void doAction(int currentButton){
     switch(actionIndex) {
   case 0:
     fill(10, 255, 10);
     square(random(width/2, width),random(0, height), random(10,30));
+    displayNum = false;
     break;
   case 1:
     //make the screen black
-    fill(0);
+    fill(0, 0, 0, 10);
     rect(0.75*width, height/2, width/2, height);
     break;
   case 2:
@@ -179,22 +195,30 @@ class Button {
     break;
   case 3:
     // randomized blue ellipses
-    fill(30, random(100,255), 200);
+    fill(10, random(150,255), 255);
     ellipse(random(width/2, width), height/2, random(50,300), random(50,300));
     break;
   case 4:
     for (int i = 0; i < buttons.length; i++) {
       buttons[i].grow();
     }
+    fill(255, random(0, 50), 240);
+    ellipse(0.6*width, random(0, height), 20, 5);
     break;
   case 5:
     for (int i = 0; i < buttons.length; i++) {
       buttons[i].shrink();
     }
+    fill(255, 255, random(0, 50));
+    ellipse(0.8*width, random(0, height), 50, 10);
+    displayNum = true;
     break;
   case 6:
     fill(255, 255, 0);
     circle(random(width/2, width),random(0, height), 20);
+    if(buttons[currentButton].x < width/2){
+    buttons[currentButton].x++;
+    }
     break;
   case 7:
     stroke(255, 30, 255);
@@ -212,14 +236,38 @@ class Button {
     break;
   case 10:
     buttons[int(random(0, buttons.length))].circle = true;
+    fill(100, 0, 240);
+    arc(random(width/2, width), random(0, height), 80, 80, 0, PI+QUARTER_PI + random(0,2), PIE);
+    if(buttons[currentButton].x < width/2){
+    buttons[currentButton].x++;
+    }
     break;
   case 11:
     fill(250, 0, 10);
     float c = random(0, width/2) + width/2;
-    circle(c, c, 50);
-    circle(c+50, c, 50);
-    circle(c+100, c, 50);
+    circle(c, (random(width/2, width)), 50);
+    circle(c+50, (random(width/2, width)), 50);
+    circle(c+100, (random(width/2, width)), 50);
     buttons[int(random(0, buttons.length))].circle = false;
+    break;
+  case 12:
+    fill(30, 0, 255);
+    float d = random(0, width/2) + width/2;
+    circle((random(width/2, width)), d, 50);
+    circle((random(width/2, width)), d+50, 50);
+    circle((random(width/2, width)), d+100, 50);
+    buttons[int(random(0, buttons.length))].circle = false;
+    break;
+  case 13:
+    stroke(255, 20, 255);
+    line(0.75*width, height/3, random(width/2, width), random(0, height));
+    break;
+  case 14:
+    for (int i = 0; i < buttons.length; i++) {
+      buttons[i].grow();
+    }
+    fill(255, random(100, 170), 0);
+    ellipse(0.75*width, 0, width/2, random(10, 200));
     break;
   default:
     // small circles
@@ -249,6 +297,11 @@ class Button {
         square(x, y, diameter);
       }
       
+      if (displayNum){
+        textSize(diameter/2);
+        fill(0);
+        text(actionIndex, x-diameter/3, y+diameter/3);
+      }
       
       //now the decoration to make the button stand out!
       fill(255);
@@ -273,6 +326,11 @@ class Button {
         square(x, y, diameter);
       }
       
+      if (displayNum){
+        textSize(diameter/2);
+        fill(255);
+        text(actionIndex, x-diameter/3, y+diameter/3);
+      }
       
       //now the decoration to make the button stand out!
       fill(255);
@@ -283,7 +341,7 @@ class Button {
   }
   
   void grow(){
-    if (diameter < 250){
+    if (diameter < 180){
       diameter++;
     }
   }
