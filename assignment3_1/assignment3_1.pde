@@ -50,8 +50,8 @@ void processData() {
 
 void setup() {
   //objLines = loadStrings("teapot.obj"); //load in 3D model
-  //objLines = loadStrings("CO2_02.obj"); //load in 3D model
-    objLines = loadStrings("car_03.obj"); //load in 3D model
+  objLines = loadStrings("CO2_02.obj"); //load in 3D model
+  //objLines = loadStrings("car_03.obj"); //load in 3D model
   processData();
   size(750, 750, P3D);
   smooth(5);
