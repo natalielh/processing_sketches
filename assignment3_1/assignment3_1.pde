@@ -90,11 +90,18 @@ void draw() {
         objLines = loadStrings("CO2_02.obj"); //load in 3D model
         processData();
         break;
+      case '4':
+        println("KEY PRESSED: 4");
+        setup();
+        break;
     }
+  } else {
+     timeFree += .0025;
+     time = timeFree % 1 - .25; //PAUSES IT. IF A BUTTON IS PRESSED, CLOCK DOESN'T TICK.
   }
   
-  timeFree += .0025;
-  time = timeFree % 1 - .25;
+  //timeFree += .0025;
+  //time = timeFree % 1 - .25;
   float s = sin(time * TAU) / 2. + .5;
   float x, y;
   fill(0, 125); //clear canvas for next frame
