@@ -28,8 +28,9 @@ int[][] colo=new int[300][3];
 String txt;
 String txt2;
 String txt3;
-float y = 0;
-float d = 0;
+float yText = 0;
+float dText = 0;
+PFont Courier;
 
 //  MODEL DECLARATIONS  //
 float time = 0, timeFree = 0;
@@ -75,10 +76,14 @@ void setup() {
   txt3 = join(lines3, "\n");
   
   
+  //  TEXT SETUP  //
+  Courier = createFont("Courier", 12);
+  
+  
   //  SKETCH SETUP  //
   size(displayWidth, displayHeight, P3D);  //take up the whole screen
-  frameRate(30);
-  smooth(5);  //adds lag but makes the screen look more smooth
+  //frameRate(30);  //lower framerate if it gets too laggy
+  smooth(5);  //adds a little lag but makes the screen look more smooth
 }
 
 /////////////////////////////////////////////////////
@@ -131,22 +136,24 @@ void draw() {
       //stroke(0,255,200);
       fill(0,255,200);
       //blendMode(LIGHTEST);
-      ellipse(j, 200, 4, fft.getBand(j) * 200); 
+      ellipse(j, 100, 3, fft.getBand(j) * 200); 
     }
   }
   
   //  ENCRYPTION TEXT VISUALIZER  //
+  //if(displayEncTextOn && frameCount % 10 == 0){  //tried to slow it down, still doesn't work great
   if(displayEncTextOn){
     //green encryption text
     pushStyle();
       fill(0,255,0);
       textSize(12);
-      textAlign(LEFT);
-      PFont Courier = createFont("Courier", 12);
+      //textAlign(LEFT);
+      //PFont Courier = createFont("Courier", 12);
       textFont(Courier);
-      text(txt, 0, y);
-      blendMode(LIGHTEST);
-      y = y - 10;
+      text(txt, 0, yText);
+      //blendMode(LIGHTEST);
+      yText = yText - 10;
+      if(yText < -1000){yText = 0;}  //made the text file shorter, and now it will loop instead
     popStyle();
   
     pushStyle();
@@ -156,13 +163,12 @@ void draw() {
       fill(249,245,100);
       //turquoise
       //fill(128,255,234);
-      tint(200, 200); 
+      //tint(200, 200); 
       textSize(random(10,50));
-      text(txt3, 4, d);
-      d = d - 2;
-  popStyle();
+      text(txt3, 4, dText);
+      //dText = dText - 2;
+    popStyle();
   }
-
   //
   
 
@@ -199,11 +205,13 @@ void draw() {
   //}
   
   
-  //  TIME UPDATE FOR ANIMATION  //
+  //  TIME UPDATE FOR MODEL ANIMATION  //
   timeFree += .0025;
   time = timeFree % 1 - .25;
-  //  TIME UPDATE FOR ANIMATION  //
+  //  TIME UPDATE FOR MODEL ANIMATION  //
   
+  
+  //  MODELS  //
   float s = sin(time * TAU) / 2. + .5;
   float x, y;
   fill(0, 125); //clear canvas for next frame
