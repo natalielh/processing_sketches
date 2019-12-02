@@ -81,7 +81,8 @@ void setup() {
   
   
   //  SKETCH SETUP  //
-  size(displayWidth, displayHeight, P3D);  //take up the whole screen
+  //size(displayWidth, displayHeight, P3D);  //take up the whole screen
+  size(720, 900, P3D);  //poster size
   //frameRate(30);  //lower framerate if it gets too laggy
   smooth(5);  //adds a little lag but makes the screen look more smooth
 }
@@ -152,7 +153,7 @@ void draw() {
       textFont(Courier);
       text(txt, 0, yText);
       //blendMode(LIGHTEST);
-      yText = yText - 10;
+      if(frameCount % 10 == 0){yText -= 10;}
       if(yText < -1000){yText = 0;}  //made the text file shorter, and now it will loop instead
     popStyle();
   
