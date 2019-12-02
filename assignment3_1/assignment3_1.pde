@@ -2,10 +2,16 @@
    [        by Blokatt ] 
    [  03/12/2017 1AM   ] */ 
 
+////////////////////////
+/////   LIBRARIES  /////
+////////////////////////
 import java.util.Arrays;
 import ddf.minim.analysis.*;
 import ddf.minim.*;
  
+////////////////////////
+///// DECLARATIONS /////
+////////////////////////
 Minim minim;
 AudioPlayer jingle;
 AudioInput input;
@@ -25,45 +31,22 @@ String[] objLines;
 Vec3[] vertices = new Vec3[0];
 Ind3[] faces = new Ind3[0];
 
-void processData() {
-  for (String line : objLines) {
-    if (line.length() > 1) {
-      String[] coords = line.split("\\s+");
-      switch (coords[0]) {
-      case "v": 
-        vertices = Arrays.copyOf(vertices, vertices.length + 1);
-        vertices[vertices.length - 1] = new Vec3();
-        vertices[vertices.length - 1].x = Float.parseFloat(coords[1]);
-        vertices[vertices.length - 1].y = Float.parseFloat(coords[2]);
-        vertices[vertices.length - 1].z = Float.parseFloat(coords[3]);       
-        break;
-      case "f": 
-        faces = Arrays.copyOf(faces, faces.length + 1);
-        faces[faces.length - 1] = new Ind3();
-        faces[faces.length - 1].x = Integer.parseInt(coords[1]) - 1;
-        faces[faces.length - 1].y = Integer.parseInt(coords[2]) - 1;
-        faces[faces.length - 1].z = Integer.parseInt(coords[3]) - 1;      
-        break;
-      default:
-        break;
-      }
-    }
-  }
-}
-
 //void setupObj() {
 //  objLines = loadStrings("car_03.obj"); //load in 3D model
 //  processData();
 //}
 
+////////////////////////
+/////     SETUP    /////
+////////////////////////
 void setup() {
-  //model stuff
+  //MODEL SETUP
   //objLines = loadStrings("teapot.obj"); //load in 3D model
   objLines = loadStrings("CO2_02.obj"); //load in 3D model
   //objLines = loadStrings("car_03.obj"); //load in 3D model
   processData();
   
-  //sound stuff
+  //SOUND SETUP
   minim = new Minim(this);
   input = minim.getLineIn();
   fft = new FFT(input.bufferSize(), input.sampleRate());
@@ -86,9 +69,12 @@ void setup() {
 //    }
 //}
 
+////////////////////////
+/////     DRAW     /////
+////////////////////////
 void draw() {
   
-  //SOUNDWAVE AUDIO VISUALIZER
+  //  SOUNDWAVE AUDIO VISUALIZER  //
   fft.forward(input.mix);
   for(int j = 0; j < fft.specSize() + displayWidth; j += 2) {
     fill(0,255,0);
@@ -96,6 +82,7 @@ void draw() {
     ellipse(j, 200, 1, fft.getBand(j) * 50); 
   }
   
+  //  USER INPUT KEYS  //
   if (keyPressed){
     switch(key){
       case '1':
@@ -166,6 +153,35 @@ void draw() {
   popMatrix();
   popMatrix();
   //blendMode(NORMAL);
+}
+
+////////////////////////
+/////  FUNCTIONS   /////
+////////////////////////
+void processData() {
+  for (String line : objLines) {
+    if (line.length() > 1) {
+      String[] coords = line.split("\\s+");
+      switch (coords[0]) {
+      case "v": 
+        vertices = Arrays.copyOf(vertices, vertices.length + 1);
+        vertices[vertices.length - 1] = new Vec3();
+        vertices[vertices.length - 1].x = Float.parseFloat(coords[1]);
+        vertices[vertices.length - 1].y = Float.parseFloat(coords[2]);
+        vertices[vertices.length - 1].z = Float.parseFloat(coords[3]);       
+        break;
+      case "f": 
+        faces = Arrays.copyOf(faces, faces.length + 1);
+        faces[faces.length - 1] = new Ind3();
+        faces[faces.length - 1].x = Integer.parseInt(coords[1]) - 1;
+        faces[faces.length - 1].y = Integer.parseInt(coords[2]) - 1;
+        faces[faces.length - 1].z = Integer.parseInt(coords[3]) - 1;      
+        break;
+      default:
+        break;
+      }
+    }
+  }
 }
 
 //I'm not really sure what this does v
