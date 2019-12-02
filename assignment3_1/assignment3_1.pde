@@ -53,9 +53,12 @@ Ind3[] faces = new Ind3[0];
 ////////////////////////
 void setup() {
   //  MODEL SETUP  //
+  // the first model that appears
   //objLines = loadStrings("teapot.obj"); //load in 3D model
-  objLines = loadStrings("CO2_02.obj"); //load in 3D model
-  //objLines = loadStrings("car_03.obj"); //load in 3D model
+  //objLines = loadStrings("CO2_02.obj");
+  //objLines = loadStrings("car_03.obj");
+  //objLines = loadStrings("clothes.obj");
+  objLines = loadStrings("sofa.obj");
   
   
   processData();
