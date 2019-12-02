@@ -24,6 +24,13 @@ AudioInput input;
 FFT fft;
 int[][] colo=new int[300][3];
 
+//  SCROLLING ENCRYPTION TEXT DECLARATIONS  //
+String txt;
+String txt2;
+String txt3;
+float y = 0;
+float d = 0;
+
 //  MODEL DECLARATIONS  //
 float time = 0, timeFree = 0;
 float progress = 1;
@@ -49,6 +56,7 @@ void setup() {
   objLines = loadStrings("CO2_02.obj"); //load in 3D model
   //objLines = loadStrings("car_03.obj"); //load in 3D model
   
+  
   processData();
   
   //  SOUND SETUP  //
@@ -56,7 +64,20 @@ void setup() {
   input = minim.getLineIn();
   fft = new FFT(input.bufferSize(), input.sampleRate());
   
+  //  SCROLLING ENC. TEXT SETUP  //
+    String[] lines = loadStrings("encryptiontext2.txt");
+  txt = join(lines, "\n");
+  
+  String[] lines2 = loadStrings("encryptiontext2.txt");
+  txt2 = join(lines2, "\n");
+  
+  String[] lines3 = loadStrings("encryption3.txt");
+  txt3 = join(lines3, "\n");
+  
+  
+  //  SKETCH SETUP  //
   size(displayWidth, displayHeight, P3D);  //take up the whole screen
+  frameRate(30);
   smooth(5);  //adds lag but makes the screen look more smooth
 }
 
@@ -89,6 +110,10 @@ void keyReleased(){
         println("KEY PRESSED: " + key);
         displaySoundVizOn = !displaySoundVizOn;
         break;
+      case 'w':
+        println("KEY PRESSED: " + key);
+        displayEncTextOn = !displayEncTextOn;
+        break;
     }
 }
 
@@ -101,11 +126,45 @@ void draw() {
   if(displaySoundVizOn){
     fft.forward(input.mix);
     for(int j = 0; j < fft.specSize() + displayWidth; j += 2) {
-      fill(0,255,0);
+      //fill(0);
+      //strokeWeight(1);
+      //stroke(0,255,200);
+      fill(0,255,200);
       //blendMode(LIGHTEST);
-      ellipse(j, 200, 1, fft.getBand(j) * 50); 
+      ellipse(j, 200, 4, fft.getBand(j) * 200); 
     }
   }
+  
+  //  ENCRYPTION TEXT VISUALIZER  //
+  if(displayEncTextOn){
+    //green encryption text
+    pushStyle();
+      fill(0,255,0);
+      textSize(12);
+      textAlign(LEFT);
+      PFont Courier = createFont("Courier", 12);
+      textFont(Courier);
+      text(txt, 0, y);
+      blendMode(LIGHTEST);
+      y = y - 10;
+    popStyle();
+  
+    pushStyle();
+      //unicode encryption text
+      textFont(Courier);
+      //yellow
+      fill(249,245,100);
+      //turquoise
+      //fill(128,255,234);
+      tint(200, 200); 
+      textSize(random(10,50));
+      text(txt3, 4, d);
+      d = d - 2;
+  popStyle();
+  }
+
+  //
+  
 
   //  USER INPUT KEYS  //
   //if (keyPressed){
