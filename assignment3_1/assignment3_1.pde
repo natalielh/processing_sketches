@@ -110,7 +110,8 @@ void keyReleased(){
         break;
       case '4':
         println("KEY PRESSED: " + key);
-        setup();
+        objLines = loadStrings("clothes.obj"); //load in 3D model
+        processData();
         break;
       case 'q':
         println("KEY PRESSED: " + key);
