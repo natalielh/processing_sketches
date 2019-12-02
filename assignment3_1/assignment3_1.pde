@@ -12,20 +12,24 @@ import ddf.minim.*;
 ////////////////////////
 ///// DECLARATIONS /////
 ////////////////////////
+
+// CERTAIN VISUALS ON / OFF  //
+boolean displaySoundVizOn = true;
+boolean displayEncTextOn = true;
+
+//  AUDIO DECLARATIONS  //
 Minim minim;
 AudioPlayer jingle;
 AudioInput input;
 FFT fft;
 int[][] colo=new int[300][3];
+
+//  MODEL DECLARATIONS  //
 float time = 0, timeFree = 0;
 float progress = 1;
 
-class Vec3 {
-  public float x, y, z;
-}
-class Ind3 {
-  public int x, y, z;
-}
+class Vec3 {public float x, y, z;}
+class Ind3 {public int x, y, z;}
 
 String[] objLines;
 Vec3[] vertices = new Vec3[0];
@@ -40,34 +44,53 @@ Ind3[] faces = new Ind3[0];
 /////     SETUP    /////
 ////////////////////////
 void setup() {
-  //MODEL SETUP
+  //  MODEL SETUP  //
   //objLines = loadStrings("teapot.obj"); //load in 3D model
   objLines = loadStrings("CO2_02.obj"); //load in 3D model
   //objLines = loadStrings("car_03.obj"); //load in 3D model
+  
   processData();
   
-  //SOUND SETUP
+  //  SOUND SETUP  //
   minim = new Minim(this);
   input = minim.getLineIn();
   fft = new FFT(input.bufferSize(), input.sampleRate());
   
-  size(displayWidth, displayHeight, P3D);
-  smooth(5);
+  size(displayWidth, displayHeight, P3D);  //take up the whole screen
+  smooth(5);  //adds lag but makes the screen look more smooth
 }
 
-//void keyReleased(){
-//  //BUTTON CONTROLS
-//      switch(key){
-//      case 1:
-//        println("KEY PRESSED: 1");
-//        break;
-//      case 2:
-//        println("KEY PRESSED: 2");
-//        break;
-//      case 3:
-//        break;
-//    }
-//}
+/////////////////////////////////////////////////////
+/////     USER INPUT: KEY RELEASED, NOT HELD    /////
+/////////////////////////////////////////////////////
+void keyReleased(){
+  //BUTTON CONTROLS
+      switch(key){
+      case '1':
+        println("KEY PRESSED: " + key);
+        objLines = loadStrings("car_03.obj"); //load in 3D model
+        processData();
+        break;
+      case '2':
+        println("KEY PRESSED: " + key);
+        objLines = loadStrings("teapot.obj"); //load in 3D model
+        processData();
+        break;
+      case '3':
+        println("KEY PRESSED: " + key);
+        objLines = loadStrings("CO2_02.obj"); //load in 3D model
+        processData();
+        break;
+      case '4':
+        println("KEY PRESSED: " + key);
+        setup();
+        break;
+      case 'q':
+        println("KEY PRESSED: " + key);
+        displaySoundVizOn = !displaySoundVizOn;
+        break;
+    }
+}
 
 ////////////////////////
 /////     DRAW     /////
@@ -75,43 +98,53 @@ void setup() {
 void draw() {
   
   //  SOUNDWAVE AUDIO VISUALIZER  //
-  fft.forward(input.mix);
-  for(int j = 0; j < fft.specSize() + displayWidth; j += 2) {
-    fill(0,255,0);
-    //blendMode(LIGHTEST);
-    ellipse(j, 200, 1, fft.getBand(j) * 50); 
-  }
-  
-  //  USER INPUT KEYS  //
-  if (keyPressed){
-    switch(key){
-      case '1':
-        println("KEY PRESSED: 1");
-        objLines = loadStrings("car_03.obj"); //load in 3D model
-        processData();
-        break;
-      case '2':
-        println("KEY PRESSED: 2");
-        objLines = loadStrings("teapot.obj"); //load in 3D model
-        processData();
-        break;
-      case '3':
-        println("KEY PRESSED: 3");
-        objLines = loadStrings("CO2_02.obj"); //load in 3D model
-        processData();
-        break;
-      case '4':
-        println("KEY PRESSED: 4");
-        setup();
-        break;
+  if(displaySoundVizOn){
+    fft.forward(input.mix);
+    for(int j = 0; j < fft.specSize() + displayWidth; j += 2) {
+      fill(0,255,0);
+      //blendMode(LIGHTEST);
+      ellipse(j, 200, 1, fft.getBand(j) * 50); 
     }
-  } else {
-     timeFree += .0025;
-     time = timeFree % 1 - .25; //PAUSES IT. IF A BUTTON IS PRESSED, CLOCK DOESN'T TICK.
   }
+
+  //  USER INPUT KEYS  //
+  //if (keyPressed){
+  //  switch(key){
+  //    case '1':
+  //      println("KEY PRESSED: " + key);
+  //      objLines = loadStrings("car_03.obj"); //load in 3D model
+  //      processData();
+  //      break;
+  //    case '2':
+  //      println("KEY PRESSED: " + key);
+  //      objLines = loadStrings("teapot.obj"); //load in 3D model
+  //      processData();
+  //      break;
+  //    case '3':
+  //      println("KEY PRESSED: " + key);
+  //      objLines = loadStrings("CO2_02.obj"); //load in 3D model
+  //      processData();
+  //      break;
+  //    case '4':
+  //      println("KEY PRESSED: " + key);
+  //      setup();
+  //      break;
+  //    case 'q':
+  //      println("KEY PRESSED: " + key);
+  //      displaySoundVizOn = !displaySoundVizOn;
+  //      break;
+  //  }
+  //} else {
+  //   timeFree += .0025;
+  //   time = timeFree % 1 - .25; //PAUSES IT. IF A BUTTON IS PRESSED, CLOCK DOESN'T TICK.
+  //}
   
-  //timeFree += .0025;
-  //time = timeFree % 1 - .25;
+  
+  //  TIME UPDATE FOR ANIMATION  //
+  timeFree += .0025;
+  time = timeFree % 1 - .25;
+  //  TIME UPDATE FOR ANIMATION  //
+  
   float s = sin(time * TAU) / 2. + .5;
   float x, y;
   fill(0, 125); //clear canvas for next frame
