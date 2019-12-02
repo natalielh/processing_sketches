@@ -3,6 +3,14 @@
    [  03/12/2017 1AM   ] */ 
 
 import java.util.Arrays;
+import ddf.minim.analysis.*;
+import ddf.minim.*;
+ 
+Minim minim;
+AudioPlayer jingle;
+AudioInput input;
+FFT fft;
+int[][] colo=new int[300][3];
 float time = 0, timeFree = 0;
 float progress = 1;
 
@@ -49,11 +57,18 @@ void processData() {
 //}
 
 void setup() {
+  //model stuff
   //objLines = loadStrings("teapot.obj"); //load in 3D model
   objLines = loadStrings("CO2_02.obj"); //load in 3D model
   //objLines = loadStrings("car_03.obj"); //load in 3D model
   processData();
-  size(750, 750, P3D);
+  
+  //sound stuff
+  minim = new Minim(this);
+  input = minim.getLineIn();
+  fft = new FFT(input.bufferSize(), input.sampleRate());
+  
+  size(displayWidth, displayHeight, P3D);
   smooth(5);
 }
 
@@ -72,6 +87,14 @@ void setup() {
 //}
 
 void draw() {
+  
+  //SOUNDWAVE AUDIO VISUALIZER
+  fft.forward(input.mix);
+  for(int j = 0; j < fft.specSize() + displayWidth; j += 2) {
+    fill(0,255,0);
+    //blendMode(LIGHTEST);
+    ellipse(j, 200, 1, fft.getBand(j) * 50); 
+  }
   
   if (keyPressed){
     switch(key){
@@ -143,4 +166,9 @@ void draw() {
   popMatrix();
   popMatrix();
   //blendMode(NORMAL);
+}
+
+//I'm not really sure what this does v
+boolean FullScreen() {
+return true;
 }
