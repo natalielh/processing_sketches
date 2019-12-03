@@ -58,18 +58,38 @@ Ind3[] faces = new Ind3[0];
 ////////////////////////
 void setup() {
   //  MODEL SETUP  //
+  int selector = int(random(0, 10));  //local var to select a random model at start
+  switch(selector){
+  case 0:
+    objLines = loadStrings("CO2_02.obj");
+    break;
+  case 1:
+    objLines = loadStrings("tesla.obj");
+    break;
+  case 2:
+    objLines = loadStrings("explosion.obj");
+    break;
+  case 3:
+    objLines = loadStrings("lamp.obj");
+    break;
+  case 4:
+    objLines = loadStrings("clothes.obj");
+    break;
+  case 5:
+    objLines = loadStrings("sofa.obj");
+    break;
+  case 6:
+    objLines = loadStrings("chair.obj");
+    break;
+  default:
+    objLines = loadStrings("CO2_02.obj");
+    break;
+  }
+  
   // the first model that appears
   //objLines = loadStrings("CO2_02.obj");
-  //objLines = loadStrings("car_03.obj");
-  //objLines = loadStrings("clothes.obj");
-  //objLines = loadStrings("sofa.obj");
-  //objLines = loadStrings("chair.obj");
-  //objLines = loadStrings("lamp.obj");
-  //objLines = loadStrings("explosion.obj");
-  objLines = loadStrings("tesla.obj");
-
-
-  processData();
+  //objLines = loadStrings("car_03.obj");  //don't use
+  processData();  //always process the data after loading in to objLines
 
   //  SOUND SETUP  //
   minim = new Minim(this);
@@ -106,22 +126,32 @@ void keyReleased() {
   switch(key) {
   case '1':
     println("KEY PRESSED: " + key);
-    objLines = loadStrings("car_03.obj"); //load in 3D model
+    objLines = loadStrings("CO2_02.obj"); //load in 3D model
     processData();
     break;
   case '2':
     println("KEY PRESSED: " + key);
-    objLines = loadStrings("teapot.obj"); //load in 3D model
+    objLines = loadStrings("lamp.obj"); //load in 3D model
     processData();
     break;
   case '3':
     println("KEY PRESSED: " + key);
-    objLines = loadStrings("CO2_02.obj"); //load in 3D model
+    objLines = loadStrings("explosion.obj"); //load in 3D model
     processData();
     break;
   case '4':
     println("KEY PRESSED: " + key);
     objLines = loadStrings("clothes.obj"); //load in 3D model
+    processData();
+    break;
+  case '5':
+    println("KEY PRESSED: " + key);
+    objLines = loadStrings("tesla.obj"); //load in 3D model
+    processData();
+    break;
+  case '6':
+    println("KEY PRESSED: " + key);
+    objLines = loadStrings("chair.obj"); //load in 3D model
     processData();
     break;
   case 'q':
@@ -314,6 +344,36 @@ void processData() {
         break;
       }
     }
+  }
+}
+
+void clearData() {
+  //for (String line : objLines) {
+  //  //if (line.length() > 0) {
+  //    String[] coords = line.split("\\s+");
+  //    switch (coords[0]) {
+  //    case "v": 
+  //      vertices = Arrays.copyOf(vertices, vertices.length + 1);
+  //      vertices[vertices.length - 1] = new Vec3();
+  //      vertices[vertices.length - 1].x = Float.parseFloat(coords[1]);
+  //      vertices[vertices.length - 1].y = Float.parseFloat(coords[2]);
+  //      vertices[vertices.length - 1].z = Float.parseFloat(coords[3]);       
+  //      break;
+  //    case "f": 
+  //      faces = Arrays.copyOf(faces, faces.length + 1);
+  //      faces[faces.length - 1] = new Ind3();
+  //      faces[faces.length - 1].x = Integer.parseInt(coords[1]) - 1;
+  //      faces[faces.length - 1].y = Integer.parseInt(coords[2]) - 1;
+  //      faces[faces.length - 1].z = Integer.parseInt(coords[3]) - 1;      
+  //      break;
+  //    default:
+  //      break;
+  //    }
+  //  //}
+  //}
+  
+  for(int i=0; i<objLines.length; i++){
+    //objLines[i] = (0);
   }
 }
 
