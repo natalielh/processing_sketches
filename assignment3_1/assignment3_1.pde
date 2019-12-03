@@ -58,7 +58,8 @@ void setup() {
   //objLines = loadStrings("CO2_02.obj");
   //objLines = loadStrings("car_03.obj");
   //objLines = loadStrings("clothes.obj");
-  objLines = loadStrings("sofa.obj");
+  //objLines = loadStrings("sofa.obj");
+  objLines = loadStrings("chair.obj");
   
   
   processData();
@@ -229,7 +230,7 @@ void draw() {
   rotateZ((TAU * time * 1) * (1 - s));
   rotateX((TAU * time) * 1.5 + 1 - .8);
   pushMatrix();
-  fill(100, 0, 255, 100);
+  //fill(255, 0, 50, 100);
   //colorMode(HSB);
   //blendMode(ADD);
   beginShape(TRIANGLE);
