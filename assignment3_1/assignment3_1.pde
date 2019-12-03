@@ -1,6 +1,6 @@
 /* [ Unstable Teapot   ] 
-   [        by Blokatt ] 
-   [  03/12/2017 1AM   ] */ 
+ [        by Blokatt ] 
+ [  03/12/2017 1AM   ] */
 
 ////////////////////////
 /////   LIBRARIES  /////
@@ -8,7 +8,7 @@
 import java.util.Arrays;
 import ddf.minim.analysis.*;
 import ddf.minim.*;
- 
+
 ////////////////////////
 ///// DECLARATIONS /////
 ////////////////////////
@@ -16,7 +16,7 @@ import ddf.minim.*;
 // CERTAIN VISUALS ON / OFF  //
 boolean displaySoundVizOn = true;
 boolean displayEncTextOn = true;
-boolean displayModelsOn = true;
+boolean displayModelsOn = false;
 
 //  AUDIO DECLARATIONS  //
 Minim minim;
@@ -37,8 +37,12 @@ PFont Courier;
 float time = 0, timeFree = 0;
 float progress = 1;
 
-class Vec3 {public float x, y, z;}
-class Ind3 {public int x, y, z;}
+class Vec3 {
+  public float x, y, z;
+}
+class Ind3 {
+  public int x, y, z;
+}
 
 String[] objLines;
 Vec3[] vertices = new Vec3[0];
@@ -63,30 +67,30 @@ void setup() {
   //objLines = loadStrings("lamp.obj");
   //objLines = loadStrings("explosion.obj");
   objLines = loadStrings("tesla.obj");
-  
-  
+
+
   processData();
-  
+
   //  SOUND SETUP  //
   minim = new Minim(this);
   input = minim.getLineIn();
   fft = new FFT(input.bufferSize(), input.sampleRate());
-  
+
   //  SCROLLING ENC. TEXT SETUP  //
   String[] lines = loadStrings("encryptiontext2.txt");
   txt = join(lines, "\n");
-  
+
   String[] lines2 = loadStrings("encryptiontext2.txt");
   txt2 = join(lines2, "\n");
-  
+
   String[] lines3 = loadStrings("encryption3.txt");
   txt3 = join(lines3, "\n");
-  
-  
+
+
   //  TEXT SETUP  //
   Courier = createFont("Courier", 12);
-  
-  
+
+
   //  SKETCH SETUP  //
   //size(displayWidth, displayHeight, P3D);  //take up the whole screen
   size(720, 900, P3D);  //poster size
@@ -97,42 +101,42 @@ void setup() {
 /////////////////////////////////////////////////////
 /////     USER INPUT: KEY RELEASED, NOT HELD    /////
 /////////////////////////////////////////////////////
-void keyReleased(){
+void keyReleased() {
   //BUTTON CONTROLS
-      switch(key){
-      case '1':
-        println("KEY PRESSED: " + key);
-        objLines = loadStrings("car_03.obj"); //load in 3D model
-        processData();
-        break;
-      case '2':
-        println("KEY PRESSED: " + key);
-        objLines = loadStrings("teapot.obj"); //load in 3D model
-        processData();
-        break;
-      case '3':
-        println("KEY PRESSED: " + key);
-        objLines = loadStrings("CO2_02.obj"); //load in 3D model
-        processData();
-        break;
-      case '4':
-        println("KEY PRESSED: " + key);
-        objLines = loadStrings("clothes.obj"); //load in 3D model
-        processData();
-        break;
-      case 'q':
-        println("KEY PRESSED: " + key);
-        displaySoundVizOn = !displaySoundVizOn;
-        break;
-      case 'w':
-        println("KEY PRESSED: " + key);
-        displayEncTextOn = !displayEncTextOn;
-        break;
-      case 'e':
-        println("KEY PRESSED: " + key);
-        displayModelsOn = !displayModelsOn;
-        break;
-    }
+  switch(key) {
+  case '1':
+    println("KEY PRESSED: " + key);
+    objLines = loadStrings("car_03.obj"); //load in 3D model
+    processData();
+    break;
+  case '2':
+    println("KEY PRESSED: " + key);
+    objLines = loadStrings("teapot.obj"); //load in 3D model
+    processData();
+    break;
+  case '3':
+    println("KEY PRESSED: " + key);
+    objLines = loadStrings("CO2_02.obj"); //load in 3D model
+    processData();
+    break;
+  case '4':
+    println("KEY PRESSED: " + key);
+    objLines = loadStrings("clothes.obj"); //load in 3D model
+    processData();
+    break;
+  case 'q':
+    println("KEY PRESSED: " + key);
+    displaySoundVizOn = !displaySoundVizOn;
+    break;
+  case 'w':
+    println("KEY PRESSED: " + key);
+    displayEncTextOn = !displayEncTextOn;
+    break;
+  case 'e':
+    println("KEY PRESSED: " + key);
+    displayModelsOn = !displayModelsOn;
+    break;
+  }
 }
 
 ////////////////////////
@@ -140,50 +144,62 @@ void keyReleased(){
 ////////////////////////
 void draw() {
   
+  fill(0, 125); //clear canvas for next frame //MOVED OUT OF THE MODELS SECTION
+  rect(0, 0, width, height);  //clear canvas for next frame //MOVED OUT OF THE MODELS SECTION
+
   //  SOUNDWAVE AUDIO VISUALIZER  //
-  if(displaySoundVizOn){
+  if (displaySoundVizOn) {
     fft.forward(input.mix);
-    for(int j = 0; j < fft.specSize() + displayWidth; j += 2) {
+    for (int j = 0; j < fft.specSize() + displayWidth; j += 2) {
       //fill(0);
       //strokeWeight(1);
       //stroke(0,255,200);
-      fill(0,255,200);
+      fill(0, 255, 200);
       //blendMode(LIGHTEST);
-      ellipse(j, 100, 3, fft.getBand(j) * 200); 
+      ellipse(j, 100, 3, fft.getBand(j) * 200);
+      
+      if(j > 8 && fft.getBand(j) > 30){
+        displayModelsOn = true;
+      }
+      //turn on the display of models
     }
   }
-  
+
   //  ENCRYPTION TEXT VISUALIZER  //
   //if(displayEncTextOn && frameCount % 10 == 0){  //tried to slow it down, still doesn't work great
-  if(displayEncTextOn){
+  if (displayEncTextOn) {
     //green encryption text
     pushStyle();
-      fill(0,255,0);
-      textSize(12);
-      //textAlign(LEFT);
-      //PFont Courier = createFont("Courier", 12);
-      textFont(Courier);
-      text(txt, 0, yText);
-      //blendMode(LIGHTEST);
-      if(frameCount % 10 == 0){yText -= 10;}
-      if(yText < -1000){yText = 0;}  //made the text file shorter, and now it will loop instead
+    fill(0, 255, 0);
+    textSize(12);
+    //textAlign(LEFT);
+    //PFont Courier = createFont("Courier", 12);
+    textFont(Courier);
+    text(txt, 0, yText);
+    //blendMode(LIGHTEST);
+    if (frameCount % 10 == 0) {
+      yText -= 10;
+    }
+    if (yText < -1000) {
+      yText = 0;
+    }  //made the text file shorter, and now it will loop instead
     popStyle();
-  
+
     pushStyle();
-      //unicode encryption text
-      textFont(Courier);
-      //yellow
-      fill(249,245,100);
-      //turquoise
-      //fill(128,255,234);
-      //tint(200, 200); 
-      textSize(random(10,50));
-      text(txt3, 4, dText);
-      //dText = dText - 2;
+    //unicode encryption text
+    textFont(Courier);
+    //yellow
+    fill(249, 245, 100);
+    //turquoise
+    //fill(128,255,234);
+    //tint(200, 200); 
+    textSize(random(10, 50));
+    text(txt3, 4, dText);
+    //dText = dText - 2;
     popStyle();
   }
   //
-  
+
 
   //  USER INPUT KEYS  //
   //if (keyPressed){
@@ -216,57 +232,61 @@ void draw() {
   //   timeFree += .0025;
   //   time = timeFree % 1 - .25; //PAUSES IT. IF A BUTTON IS PRESSED, CLOCK DOESN'T TICK.
   //}
-  
-  
+
+
   //  TIME UPDATE FOR MODEL ANIMATION  //
   timeFree += .0025;
   time = timeFree % 1 - .25;
   //  TIME UPDATE FOR MODEL ANIMATION  //
-  
-  
+
+
   //  MODELS  //
-  float s = sin(time * TAU) / 2. + .5;
-  float x, y;
-  fill(0, 125); //clear canvas for next frame
-  rect(0, 0, width, height);
-  stroke(255);
-  fill(0);
-  pushMatrix();
-  translate(width / 2, height / 2, 443 + (1 - s) * 100);
-  rotateY(-(TAU * time) * 1 + 1.3);
-  rotateZ((TAU * time * 1) * (1 - s));
-  rotateX((TAU * time) * 1.5 + 1 - .8);
-  pushMatrix();
-  //fill(255, 0, 50, 100);
-  //colorMode(HSB);
-  //blendMode(ADD);
-  beginShape(TRIANGLE);
-  
-  float dist = 50;
-  for (int i = 0; i < faces.length; i++) {
-    Ind3 face = faces[i];
-    float a =  max(0, (i - map(sin(time * TAU), -1, 1, 0, faces.length)) * .05);
-    dist = 50 + a * 50;
-    strokeWeight(map(sin(time * TAU), -1, 1, 0, 1.5) * (max(0, 1 - a)));
-    x = cos(time * TAU * 10 + i * .1) * (1 - s) * dist;
-    y = - sin(time * TAU * 10 + i * .1) * (1 - s) * dist;
-    fill((time * 25 + x * y * .008 + 250) % 255, 255 - x * y * .05, 50 * (1 - a), 140 * (1 - a)); //fill changes
-    //fill((time * 25 + x * y * .008 + 100) % 255, 255 - x * y * .05, 50 * (1 - a), 140 * (1 - a)); //fill changes
-    stroke((time * 25 + x * y * .008 + 250) % 255, 255 - x * y * .05, 50 * (1 - a), 225 * (1 - a)); //stroke changes
-    vertex(vertices[face.x].x + x, vertices[face.x].y + y, vertices[face.x].z);  
-    x = cos(time * TAU * 10 + (i + .33) * .1) * (1 - s) * dist;
-    y = - sin(time * TAU * 10 + (i + .33) * .1) *  (1 - s) * dist;
-    vertex(vertices[face.y].x + x, vertices[face.y].y + y, vertices[face.y].z);
-    x = cos(time * TAU * 10 + (i + .66) * .1) * (1 - s) * dist;
-    y = - sin(time * TAU * 10 + (i + .66) * .1) * (1 - s) * dist;
-    vertex(vertices[face.z].x + x, vertices[face.z].y + y, vertices[face.z].z);
+  if (displayModelsOn) {
+    float s = sin(time * TAU) / 2. + .5;
+    float x, y;
+    //fill(0, 125); //clear canvas for next frame //MOVED OUT OF THE MODELS SECTION
+    //rect(0, 0, width, height);  //clear canvas for next frame //MOVED OUT OF THE MODELS SECTION
+    stroke(255);
+    fill(0);
+    pushMatrix();
+    translate(width / 2, height / 2, 443 + (1 - s) * 100);
+    rotateY(-(TAU * time) * 1 + 1.3);
+    rotateZ((TAU * time * 1) * (1 - s));
+    rotateX((TAU * time) * 1.5 + 1 - .8);
+    pushMatrix();
+    //fill(255, 0, 50, 100);
+    //colorMode(HSB);
+    //blendMode(ADD);
+    beginShape(TRIANGLE);
+
+    float dist = 50;
+    for (int i = 0; i < faces.length; i++) {
+      Ind3 face = faces[i];
+      float a =  max(0, (i - map(sin(time * TAU), -1, 1, 0, faces.length)) * .05);
+      dist = 50 + a * 50;
+      strokeWeight(map(sin(time * TAU), -1, 1, 0, 1.5) * (max(0, 1 - a)));
+      x = cos(time * TAU * 10 + i * .1) * (1 - s) * dist;
+      y = - sin(time * TAU * 10 + i * .1) * (1 - s) * dist;
+      fill((time * 25 + x * y * .008 + 250) % 255, 255 - x * y * .05, 50 * (1 - a), 140 * (1 - a)); //fill changes
+      //fill((time * 25 + x * y * .008 + 100) % 255, 255 - x * y * .05, 50 * (1 - a), 140 * (1 - a)); //fill changes
+      stroke((time * 25 + x * y * .008 + 250) % 255, 255 - x * y * .05, 50 * (1 - a), 225 * (1 - a)); //stroke changes
+      vertex(vertices[face.x].x + x, vertices[face.x].y + y, vertices[face.x].z);  
+      x = cos(time * TAU * 10 + (i + .33) * .1) * (1 - s) * dist;
+      y = - sin(time * TAU * 10 + (i + .33) * .1) *  (1 - s) * dist;
+      vertex(vertices[face.y].x + x, vertices[face.y].y + y, vertices[face.y].z);
+      x = cos(time * TAU * 10 + (i + .66) * .1) * (1 - s) * dist;
+      y = - sin(time * TAU * 10 + (i + .66) * .1) * (1 - s) * dist;
+      vertex(vertices[face.z].x + x, vertices[face.z].y + y, vertices[face.z].z);
+    }
+
+    endShape();
+    popMatrix();
+    popMatrix();
+    //blendMode(NORMAL);
   }
   
-  endShape();
-  popMatrix();
-  popMatrix();
-  //blendMode(NORMAL);
-}
+  
+}  // << END OF DRAW LOOP
 
 ////////////////////////
 /////  FUNCTIONS   /////
@@ -299,5 +319,5 @@ void processData() {
 
 //I'm not really sure what this does v
 boolean FullScreen() {
-return true;
+  return true;
 }
