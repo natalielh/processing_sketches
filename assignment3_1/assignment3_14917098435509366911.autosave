@@ -54,14 +54,12 @@ Ind3[] faces = new Ind3[0];
 void setup() {
   //  MODEL SETUP  //
   // the first model that appears
+  //objLines = loadStrings("teapot.obj"); //load in 3D model
   //objLines = loadStrings("CO2_02.obj");
   //objLines = loadStrings("car_03.obj");
   //objLines = loadStrings("clothes.obj");
   //objLines = loadStrings("sofa.obj");
-  //objLines = loadStrings("chair.obj");
-  //objLines = loadStrings("lamp.obj");
-  //objLines = loadStrings("explosion.obj");
-  //objLines = loadStrings("tesla.obj");
+  objLines = loadStrings("chair.obj");
   
   
   processData();
@@ -72,7 +70,7 @@ void setup() {
   fft = new FFT(input.bufferSize(), input.sampleRate());
   
   //  SCROLLING ENC. TEXT SETUP  //
-  String[] lines = loadStrings("encryptiontext2.txt");
+    String[] lines = loadStrings("encryptiontext2.txt");
   txt = join(lines, "\n");
   
   String[] lines2 = loadStrings("encryptiontext2.txt");
@@ -245,8 +243,8 @@ void draw() {
     strokeWeight(map(sin(time * TAU), -1, 1, 0, 1.5) * (max(0, 1 - a)));
     x = cos(time * TAU * 10 + i * .1) * (1 - s) * dist;
     y = - sin(time * TAU * 10 + i * .1) * (1 - s) * dist;
-    fill((time * 25 + x * y * .008 + 250) % 255, 255 - x * y * .05, 50 * (1 - a), 140 * (1 - a)); //fill changes
-    //fill((time * 25 + x * y * .008 + 100) % 255, 255 - x * y * .05, 50 * (1 - a), 140 * (1 - a)); //fill changes
+    //fill((time * 25 + x * y * .008 + 250) % 255, 255 - x * y * .05, 50 * (1 - a), 140 * (1 - a)); //fill changes
+    fill((time * 25 + x * y * .008 + 100) % 255, 255 - x * y * .05, 50 * (1 - a), 140 * (1 - a)); //fill changes
     stroke((time * 25 + x * y * .008 + 250) % 255, 255 - x * y * .05, 50 * (1 - a), 225 * (1 - a)); //stroke changes
     vertex(vertices[face.x].x + x, vertices[face.x].y + y, vertices[face.x].z);  
     x = cos(time * TAU * 10 + (i + .33) * .1) * (1 - s) * dist;
