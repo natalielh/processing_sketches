@@ -1,6 +1,3 @@
-/* [ Unstable Teapot   ] 
- [        by Blokatt ] 
- [  03/12/2017 1AM   ] */
 
 ////////////////////////
 /////   LIBRARIES  /////
@@ -17,6 +14,7 @@ import ddf.minim.*;
 boolean displaySoundVizOn = true;
 boolean displayEncTextOn = true;
 boolean displayModelsOn = false;
+boolean displayTitleOn = true;
 
 //  AUDIO DECLARATIONS  //
 Minim minim;
@@ -33,9 +31,17 @@ float yText = 0;
 float dText = 0;
 PFont Courier;
 
+//  LOADING BAR DECLARATIONS  //
+int barI= 0;
+int barTimer = 0;
+String Loading;
+
 //  MODEL DECLARATIONS  //
 float time = 0, timeFree = 0;
 float progress = 1;
+
+//  IMAGE  //
+PImage titlepic;
 
 class Vec3 {
   public float x, y, z;
@@ -112,6 +118,9 @@ void setup() {
 
   //  TEXT SETUP  //
   Courier = createFont("Courier", 12);
+  
+  //  TITLE IMAGE  //
+  titlepic = loadImage("Assignment3_TextBackground.png");
 
 
   //  SKETCH SETUP  //
@@ -171,7 +180,8 @@ void keyReleased() {
     break;
   case 'r':
     println("KEY PRESSED: " + key);
-    clearData();
+    displayTitleOn = !displayTitleOn;
+    //clearData();
     break;
   }
 }
@@ -193,7 +203,7 @@ void draw() {
       //stroke(0,255,200);
       fill(0, 255, 200);
       //blendMode(LIGHTEST);
-      ellipse(j, 100, 3, fft.getBand(j) * 200);
+      ellipse(j, height-150, 3, fft.getBand(j) * 200);
       
       if(j > 8 && fft.getBand(j) > 25){
         displayModelsOn = true;
@@ -236,39 +246,28 @@ void draw() {
     popStyle();
   }
   //
+  
+  //  LOADING BAR VIS  //
+  rect(10, 10, barI, 20);
+  barI += 5;
+  if (barI >= displayWidth - 730){barI = 0;}
+  //loading to 99%
+  int barTimer = 0 + millis();
+  textSize(12);
+  //fill(249,245,100);
+  text(barTimer, 800, 50);
+  if (barTimer == 90) {barTimer = 0;}
+  String Loading = "L O A D I N G .................................................................................." + barTimer + "%";
+  //fill(249,245,100);
+  textFont(Courier);
+  textSize(12);
+  text(Loading, 6, 50);
 
 
-  //  USER INPUT KEYS  //
-  //if (keyPressed){
-  //  switch(key){
-  //    case '1':
-  //      println("KEY PRESSED: " + key);
-  //      objLines = loadStrings("car_03.obj"); //load in 3D model
-  //      processData();
-  //      break;
-  //    case '2':
-  //      println("KEY PRESSED: " + key);
-  //      objLines = loadStrings("teapot.obj"); //load in 3D model
-  //      processData();
-  //      break;
-  //    case '3':
-  //      println("KEY PRESSED: " + key);
-  //      objLines = loadStrings("CO2_02.obj"); //load in 3D model
-  //      processData();
-  //      break;
-  //    case '4':
-  //      println("KEY PRESSED: " + key);
-  //      setup();
-  //      break;
-  //    case 'q':
-  //      println("KEY PRESSED: " + key);
-  //      displaySoundVizOn = !displaySoundVizOn;
-  //      break;
-  //  }
-  //} else {
-  //   timeFree += .0025;
-  //   time = timeFree % 1 - .25; //PAUSES IT. IF A BUTTON IS PRESSED, CLOCK DOESN'T TICK.
-  //}
+  //  TITLE IMG  //
+  if(displayTitleOn){
+    image(titlepic, 0, 0);
+  }
 
 
   //  TIME UPDATE FOR MODEL ANIMATION  //
@@ -396,6 +395,5 @@ https://www.openprocessing.org/sketch/659742
 
 "Sound Wave"
 HTTPS://WWW.YOUTUBE.COM/WATCH?V=XS62CBK9E7W
-
 
 */
