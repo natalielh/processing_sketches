@@ -16,6 +16,7 @@ import ddf.minim.*;
 // CERTAIN VISUALS ON / OFF  //
 boolean displaySoundVizOn = true;
 boolean displayEncTextOn = true;
+boolean displayModelsOn = true;
 
 //  AUDIO DECLARATIONS  //
 Minim minim;
@@ -61,7 +62,7 @@ void setup() {
   //objLines = loadStrings("chair.obj");
   //objLines = loadStrings("lamp.obj");
   //objLines = loadStrings("explosion.obj");
-  //objLines = loadStrings("tesla.obj");
+  objLines = loadStrings("tesla.obj");
   
   
   processData();
@@ -126,6 +127,10 @@ void keyReleased(){
       case 'w':
         println("KEY PRESSED: " + key);
         displayEncTextOn = !displayEncTextOn;
+        break;
+      case 'e':
+        println("KEY PRESSED: " + key);
+        displayModelsOn = !displayModelsOn;
         break;
     }
 }
