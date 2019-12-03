@@ -15,6 +15,7 @@ boolean displaySoundVizOn = true;
 boolean displayEncTextOn = true;
 boolean displayModelsOn = false;
 boolean displayTitleOn = true;
+boolean displayTitleBOn = true;
 
 //  AUDIO DECLARATIONS  //
 Minim minim;
@@ -42,6 +43,7 @@ float progress = 1;
 
 //  IMAGE  //
 PImage titlepic;
+PImage titlepicB;
 
 class Vec3 {
   public float x, y, z;
@@ -121,6 +123,7 @@ void setup() {
   
   //  TITLE IMAGE  //
   titlepic = loadImage("Assignment3_TextBackground.png");
+  titlepicB = loadImage("Assignment3_TextBackgroundSOFTWAREUPDATES.png");
 
 
   //  SKETCH SETUP  //
@@ -183,6 +186,11 @@ void keyReleased() {
     displayTitleOn = !displayTitleOn;
     //clearData();
     break;
+  case 't':
+    println("KEY PRESSED: " + key);
+    displayTitleBOn = !displayTitleBOn;
+    //clearData();
+    break;
   }
 }
 
@@ -201,7 +209,7 @@ void draw() {
       //fill(0);
       //strokeWeight(1);
       //stroke(0,255,200);
-      fill(0, 255, 200);
+      fill(0, 255, 200, 150);
       //blendMode(LIGHTEST);
       ellipse(j, height-150, 3, fft.getBand(j) * 200);
       
@@ -267,6 +275,10 @@ void draw() {
   //  TITLE IMG  //
   if(displayTitleOn){
     image(titlepic, 0, 0);
+  }
+  
+  if(displayTitleBOn){
+    image(titlepicB, 0, 0);
   }
 
 
