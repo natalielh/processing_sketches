@@ -169,6 +169,10 @@ void keyReleased() {
     println("KEY PRESSED: " + key);
     displayModelsOn = !displayModelsOn;
     break;
+  case 'r':
+    println("KEY PRESSED: " + key);
+    clearData();
+    break;
   }
 }
 
@@ -375,8 +379,15 @@ void clearData() {
   //  //}
   //}
   
-  for(int i=0; i<objLines.length; i++){
-    //objLines[i] = (0);
+  
+  //String[] objLines;
+  //Vec3[] vertices = new Vec3[0];
+  //Ind3[] faces = new Ind3[0];
+  
+  for(int i=0; i<vertices.length; i++){
+    for(int j=0; j<3; j++){
+    }
+    //vertices[i] = new Vec3(float[0], float[0], float[0]);
   }
 }
 
@@ -384,3 +395,30 @@ void clearData() {
 boolean FullScreen() {
   return true;
 }
+
+/////////////////////////
+/////   REFERENCES  /////
+/////////////////////////
+/*
+
+“Unstable Teapot”
+https://github.com/Blokatt/ProcessingStuff/tree/master/unstableTeapot
+
+“Terrain”
+https://github.com/Blokatt/ProcessingStuff/tree/master/terrain
+
+“AnalysingSample”
+https://github.com/Blokatt/ProcessingStuff/tree/master/analysingSample
+
+“dvdp”
+https://dvdp.tumblr.com/
+Just some interesting 2D, black&white inspiration
+
+“Moonlight”
+https://www.openprocessing.org/sketch/659742
+
+"Sound Wave"
+HTTPS://WWW.YOUTUBE.COM/WATCH?V=XS62CBK9E7W
+
+
+*/
