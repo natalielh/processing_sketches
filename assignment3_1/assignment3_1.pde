@@ -81,6 +81,9 @@ void setup() {
   case 6:
     objLines = loadStrings("chair.obj");
     break;
+  case 7:
+    objLines = loadStrings("chair2.obj");
+    break;
   default:
     objLines = loadStrings("CO2_02.obj");
     break;
@@ -188,7 +191,7 @@ void draw() {
       //blendMode(LIGHTEST);
       ellipse(j, 100, 3, fft.getBand(j) * 200);
       
-      if(j > 8 && fft.getBand(j) > 30){
+      if(j > 8 && fft.getBand(j) > 25){
         displayModelsOn = true;
       }
       //turn on the display of models
