@@ -12,7 +12,7 @@ import ddf.minim.*;
 
 // CERTAIN VISUALS ON / OFF  //
 boolean displaySoundVizOn = true;
-boolean displayEncTextOn = true;
+boolean displayEncTextOn = false;
 boolean displayModelsOn = false;
 boolean displayTitleOn = true;
 boolean displayTitleBOn = false;
