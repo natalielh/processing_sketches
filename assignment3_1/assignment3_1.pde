@@ -1,3 +1,18 @@
+/////////////////////////////////
+//    CARBON CATCHER STUDIO    //
+/////////////////////////////////
+/*
+------------CONTROLS------------
+ Q:  Toggle on/off audio visualizer and loading bar
+ W:  Toggle on/off encryption graphic
+ E:  Toggle off object
+ R:  Toggle on/off Poster #1 text
+ T:  Toggle on/off Poster #2 text
+ Y:  Toggle on/off Poster #3 text
+ U:  Toggle on/off loading bar
+ Microphone: Speak or blow into the microphone to spawn an object.
+ 
+ */
 
 ////////////////////////
 /////   LIBRARIES  /////
@@ -17,6 +32,7 @@ boolean displayModelsOn = false;
 boolean displayTitleOn = true;
 boolean displayTitleBOn = false;
 boolean displayTitleCOn = false;
+boolean displayLoadOn = false;
 
 //  AUDIO DECLARATIONS  //
 Minim minim;
@@ -69,7 +85,7 @@ Ind3[] faces = new Ind3[0];
 void setup() {
   //  MODEL SETUP  //
   int selector = int(random(0, 10));  //local var to select a random model at start
-  switch(selector){
+  switch(selector) {
   case 0:
     objLines = loadStrings("CO2_02.obj");
     break;
@@ -98,10 +114,9 @@ void setup() {
     objLines = loadStrings("CO2_02.obj");
     break;
   }
-  
+
   // the first model that appears
   //objLines = loadStrings("CO2_02.obj");
-  //objLines = loadStrings("car_03.obj");  //don't use
   processData();  //always process the data after loading in to objLines
 
   //  SOUND SETUP  //
@@ -122,7 +137,7 @@ void setup() {
 
   //  TEXT SETUP  //
   Courier = createFont("Courier", 12);
-  
+
   //  TITLE IMAGE  //
   titlepic = loadImage("Assignment3_TextBackground.png");
   titlepicB = loadImage("Assignment3_TextBackgroundSOFTWAREUPDATES.png");
@@ -187,17 +202,18 @@ void keyReleased() {
   case 'r':
     println("KEY PRESSED: " + key);
     displayTitleOn = !displayTitleOn;
-    //clearData();
     break;
   case 't':
     println("KEY PRESSED: " + key);
     displayTitleBOn = !displayTitleBOn;
-    //clearData();
     break;
   case 'y':
     println("KEY PRESSED: " + key);
     displayTitleCOn = !displayTitleCOn;
-    //clearData();
+    break;
+  case 'u':
+    println("KEY PRESSED: " + key);
+    displayLoadOn = !displayLoadOn;
     break;
   }
 }
@@ -206,7 +222,7 @@ void keyReleased() {
 /////     DRAW     /////
 ////////////////////////
 void draw() {
-  
+
   fill(0, 125); //clear canvas for next frame //MOVED OUT OF THE MODELS SECTION
   rect(0, 0, width, height);  //clear canvas for next frame //MOVED OUT OF THE MODELS SECTION
 
@@ -217,14 +233,15 @@ void draw() {
       //fill(0);
       //strokeWeight(1);
       //stroke(0,255,200);
+      stroke(0, 255, 200, 150);
       fill(0, 255, 200, 150);
       //blendMode(LIGHTEST);
-      ellipse(j, height-150, 3, fft.getBand(j) * 200);
-      
-      if(j > 8 && fft.getBand(j) > 25){
+      ellipse(j, height-220, 3, fft.getBand(j) * 200);
+
+      //display models from sound input
+      if (j > 8 && fft.getBand(j) > 25) {
         displayModelsOn = true;
       }
-      //turn on the display of models
     }
   }
 
@@ -262,34 +279,38 @@ void draw() {
     popStyle();
   }
   //
-  
+
   //  LOADING BAR VIS  //
-  rect(10, 10, barI, 20);
-  barI += 5;
-  if (barI >= displayWidth - 730){barI = 0;}
-  //loading to 99%
-  int barTimer = 0 + millis();
-  textSize(12);
-  //fill(249,245,100);
-  text(barTimer, 800, 50);
-  if (barTimer == 90) {barTimer = 0;}
-  String Loading = "L O A D I N G .................................................................................." + barTimer + "%";
-  //fill(249,245,100);
-  textFont(Courier);
-  textSize(12);
-  text(Loading, 6, 50);
+  if (displayLoadOn) {
+    fill(0, 255, 200, 230);
+    rect(10, 10, barI, 20);
+    barI += 5;
+    if (barI >= displayWidth - 730) {
+      barI = 0;
+    }
+    //loading to 99%
+    int barTimer = 0 + millis();
+    textSize(12);
+    text(barTimer, 800, 50);
+    if (barTimer == 90) {
+      barTimer = 0;
+    }
+    String Loading = "L O A D I N G .................................................................................." + barTimer + "%";
+    //fill(249,245,100);
+    textFont(Courier);
+    textSize(12);
+    text(Loading, 6, 50);
+  }
 
 
   //  TITLE IMG  //
-  if(displayTitleOn){
+  if (displayTitleOn) {
     image(titlepic, 0, 0);
   }
-  
-  if(displayTitleBOn){
+  if (displayTitleBOn) {
     image(titlepicB, 0, 0);
   }
-  
-    if(displayTitleCOn){
+  if (displayTitleCOn) {
     image(titlepicC, 0, 0);
   }
 
@@ -345,8 +366,6 @@ void draw() {
     popMatrix();
     //blendMode(NORMAL);
   }
-  
-  
 }  // << END OF DRAW LOOP
 
 ////////////////////////
@@ -379,13 +398,13 @@ void processData() {
 }
 
 void clearData() {
-  
+
   //String[] objLines;
   //Vec3[] vertices = new Vec3[0];
   //Ind3[] faces = new Ind3[0];
-  
-  for(int i=0; i<vertices.length; i++){
-    for(int j=0; j<3; j++){
+
+  for (int i=0; i<vertices.length; i++) {
+    for (int j=0; j<3; j++) {
     }
     //vertices[i] = new Vec3(float[0], float[0], float[0]);
   }
@@ -401,23 +420,23 @@ boolean FullScreen() {
 /////////////////////////
 /*
 
-“Unstable Teapot”
-https://github.com/Blokatt/ProcessingStuff/tree/master/unstableTeapot
-
-“Terrain”
-https://github.com/Blokatt/ProcessingStuff/tree/master/terrain
-
-“AnalysingSample”
-https://github.com/Blokatt/ProcessingStuff/tree/master/analysingSample
-
-“dvdp”
-https://dvdp.tumblr.com/
-Just some interesting 2D, black&white inspiration
-
-“Moonlight”
-https://www.openprocessing.org/sketch/659742
-
-"Sound Wave"
-HTTPS://WWW.YOUTUBE.COM/WATCH?V=XS62CBK9E7W
-
-*/
+ “Unstable Teapot”
+ https://github.com/Blokatt/ProcessingStuff/tree/master/unstableTeapot
+ 
+ “Terrain”
+ https://github.com/Blokatt/ProcessingStuff/tree/master/terrain
+ 
+ “AnalysingSample”
+ https://github.com/Blokatt/ProcessingStuff/tree/master/analysingSample
+ 
+ “dvdp”
+ https://dvdp.tumblr.com/
+ Just some interesting 2D, black&white inspiration
+ 
+ “Moonlight”
+ https://www.openprocessing.org/sketch/659742
+ 
+ "Sound Wave"
+ HTTPS://WWW.YOUTUBE.COM/WATCH?V=XS62CBK9E7W
+ 
+ */
